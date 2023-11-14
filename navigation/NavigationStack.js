@@ -4,7 +4,7 @@ const Stack = createStackNavigator();
 //importacion de las pantallas
 import Login from '../screens/Login';
 import Register from '../screens/Register';
-
+import Home from '../screens/Home';
 
 
 export default function NavigationStack() {
@@ -14,12 +14,16 @@ export default function NavigationStack() {
       <Stack.Screen 
         name="login"
         component={Login}
-        options={{title: "Iniciar Sesion"}}
+        options={{headerShown:false}}
       />
       <Stack.Screen
        name='Registro'
        component={Register}
-       options={{title: "Registro"}}/>
+       options={{headerShown:false}}/>
+       <Stack.Screen
+       name='Home'
+       component={Home}
+       options={{headerShown:false}}/>
     </Stack.Navigator>
   )
 }
