@@ -1,15 +1,21 @@
-/*import { StyleSheet,  View, Image } from 'react-native';
+import { StyleSheet,  View, Image, Touchable , Text } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import colors from '../components/colors'
 
-export default function DrawerItem(props){
+export default function DrawerView(props){
     return(
         <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerHead}>
             <View style={styles.container}>
 
-
+             {/**Apartado para informacion de login */}
             </View>
 
             <DrawerItemList {...props}/>
+
+            <TouchableOpacity>
+                <Text>Cerrar Session</Text>
+            </TouchableOpacity>
 
 
         </DrawerContentScrollView>
@@ -34,9 +40,8 @@ const styles = StyleSheet.create({
 
     },
     drawerHead:{
-        backgroundColor:'#091353',
+        backgroundColor: colors.blanquito,
 
         height:'100%',
     },
 })
-*/

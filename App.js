@@ -5,8 +5,10 @@ import { StyleSheet, Text, View } from 'react-native';
 import Onboarding from './components/Onboarding'
 import { NavigationContainer } from '@react-navigation/native';
 import NavigationStack from './navigation/NavigationStack';
+import TabNavigation from './navigation/TabNavigation';
 export default function App() {
   const [isFirstLaunch, setIsFirstLaunch]= React.useState(null);
+  
 
   useEffect(()=>{
     AsyncStorage.getItem('alreadyLaunched').then(value=>{
@@ -28,6 +30,7 @@ export default function App() {
       return(
         <NavigationContainer>
           <NavigationStack/>
+        
         </NavigationContainer>
       );
     }

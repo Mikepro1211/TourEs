@@ -4,7 +4,7 @@ const Stack = createStackNavigator();
 //importacion de las pantallas
 import Login from '../screens/Login';
 import Register from '../screens/Register';
-import Home from '../screens/Home';
+import DrawerNavigation from './DrawerNavigation';
 
 
 export default function NavigationStack() {
@@ -22,8 +22,9 @@ export default function NavigationStack() {
        options={{headerShown:false}}/>
        <Stack.Screen
        name='Home'
-       component={Home}
-       options={{headerShown:false}}/>
+       component={DrawerNavigation}
+       options={{headerShown:false }}
+       />
     </Stack.Navigator>
   )
 }
