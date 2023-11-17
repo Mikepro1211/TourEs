@@ -23,7 +23,7 @@ export default function NavigationStack() {
        <Stack.Screen
        name='Home'
        component={DrawerNavigation}
-       options={{headerShown:false }}
+       options={{headerShown:false ,  }}
        />
     </Stack.Navigator>
   )

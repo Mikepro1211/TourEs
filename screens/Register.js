@@ -12,8 +12,6 @@ import {
 import colors from "../components/colors";
 //import { TextInput } from 'react-native-paper'
 
-
-
 //firebase
 import firebaseConfig from "../FirebaseConfig/FirebaseConfig";
 initializeApp(firebaseConfig);
@@ -25,11 +23,11 @@ export default function Register({ navigation }) {
   const handleRegister = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in 
+        // Signed in
         const user = userCredential.user;
-        console.log(user)
-        Alert.alert("Usuario creado correctamente");
-        navigation.navigate('Home'); // Añade esta línea
+        console.log(user);
+
+        navigation.navigate("Home"); // Añade esta línea
         //borrar los campos del formulario
         setEmail("");
         setPassword("");
@@ -40,7 +38,7 @@ export default function Register({ navigation }) {
         // ..
       });
   };
-  const [userName ,  setUsername ]= React.useState("");
+  const [userName, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [Confirmpassword, setConfirmPassword] = React.useState("");
@@ -59,7 +57,6 @@ export default function Register({ navigation }) {
           <Text style={styles.formText}>Email</Text>
           {/** Input de Email */}
           <View style={styles.ContainerInput}>
-
             <TextInput
               style={styles.input}
               placeholder="Username"
@@ -92,30 +89,24 @@ export default function Register({ navigation }) {
               onChangeText={setConfirmPassword}
               secureTextEntry={true}
             />
-          
           </View>
         </View>
       </View>
-     
 
       <Button title="Register" onPress={handleRegister} />
-      <View style={styles.footer}>
-        
-      </View>
+      <View style={styles.footer}></View>
     </SafeAreaView>
   );
   //Firebase
-  
 }
 
 const styles = StyleSheet.create({
   footer: {
     display: "flex",
-    flex:0.10,
+    flex: 0.1,
     justifyContent: "center",
-    
+
     alignItems: "center",
- 
   },
   forgotPassawordContainer: {
     display: "flex",

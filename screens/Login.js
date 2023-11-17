@@ -9,7 +9,8 @@ import {
   Button
 } from "react-native";
 import colors from "../components/colors";
-//import { TextInput } from 'react-native-paper'
+//import Alerts  
+
 
 //Firebase Config 
 import  firebaseConfig from "../FirebaseConfig/FirebaseConfig";
@@ -29,6 +30,9 @@ export default function Login({ navigation }) {
     const user = userCredential.user;
     console.log(user)
     navigation.navigate('Home'); // Añade esta línea
+    //borrar campos 
+    setEmail("");
+    setPassword("");
   })
   .catch((error) => {
     const errorCode = error.code;

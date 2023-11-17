@@ -3,23 +3,27 @@ import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawe
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import colors from '../components/colors'
 import  {getAuth, signOut} from 'firebase/auth';
+import Login from '../screens/Login';
 
 
-export default function DrawerView(props){
-
+export default function DrawerView(props ){
+   const  {navigation} = props;
     const auth = getAuth();
+    const user = auth.currentUser;
+    const [screen, setScreen] = useState("login");
 
     const handlerSignOut = () => {
         signOut(auth).then(() => {
           // Sign-out successful.
-          console.log("Sesion cerrada correctamente" + auth.currentUser);
+          console.log("Sesion cerrada correctamente"  );
+          navigation.navigate('login');
         }).catch((error) => {
           // An error happened.
         });
       }
     
     
-    const user = auth.currentUser;
+   
     let displayName = '';
     let email = '';
 

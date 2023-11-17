@@ -1,7 +1,9 @@
 
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { View } from "react-native";
+//Importacion de las pantallas  
 import Home from "../screens/Home";
+import EditProfile from "../screens/EditProfile";
 import DrawerView from "./DrawerView";
 import colors from "../components/colors";
 import TabNavigation from "./TabNavigation";
@@ -47,6 +49,9 @@ export default function DrawerNavigation({navigation}) {
       <Drawer.Screen
         name="Inicio"
         component={Home}/>
+      <Drawer.Screen
+        name = "Edit Profile" 
+        component={EditProfile}/>
 
           </Drawer.Navigator>
   );
