@@ -6,14 +6,44 @@ import {
   SafeAreaView,
   StyleSheet,
   TextInput,
+  Button,
+  Alert,
 } from "react-native";
 import colors from "../components/colors";
 //import { TextInput } from 'react-native-paper'
-import Button from "../components/Button";
+
+
+
+//firebase
+import firebaseConfig from "../FirebaseConfig/FirebaseConfig";
+initializeApp(firebaseConfig);
+const auth = getAuth();
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { initializeApp } from "@firebase/app";
 
 export default function Register({ navigation }) {
+  const handleRegister = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        console.log(user)
+        Alert.alert("Usuario creado correctamente");
+        navigation.navigate('Home'); // Añade esta línea
+        //borrar los campos del formulario
+        setEmail("");
+        setPassword("");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+  };
+  const [userName ,  setUsername ]= React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [Confirmpassword, setConfirmPassword] = React.useState("");
   return (
     <SafeAreaView style={styles.safeare}>
       <View style={styles.header}>
@@ -29,6 +59,14 @@ export default function Register({ navigation }) {
           <Text style={styles.formText}>Email</Text>
           {/** Input de Email */}
           <View style={styles.ContainerInput}>
+
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              value={userName}
+              onChangeText={setUsername}
+              keyboardType="default"
+            />
             <TextInput
               style={styles.input}
               placeholder="Email"
@@ -43,28 +81,31 @@ export default function Register({ navigation }) {
               style={styles.input}
               placeholder="Password"
               value={password}
-              onChange={setPassword}
+              onChangeText={setPassword}
               secureTextEntry={true}
             />
             <Text style={styles.formText}>Confirm Password</Text>
             <TextInput
               style={styles.input}
               placeholder="Password"
-              value={password}
-              onChange={setPassword}
+              value={Confirmpassword}
+              onChangeText={setConfirmPassword}
               secureTextEntry={true}
             />
           
           </View>
         </View>
       </View>
+     
 
-      <Button title="Register" />
+      <Button title="Register" onPress={handleRegister} />
       <View style={styles.footer}>
         
       </View>
     </SafeAreaView>
   );
+  //Firebase
+  
 }
 
 const styles = StyleSheet.create({

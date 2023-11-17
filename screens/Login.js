@@ -6,12 +6,35 @@ import {
   SafeAreaView,
   StyleSheet,
   TextInput,
+  Button
 } from "react-native";
 import colors from "../components/colors";
 //import { TextInput } from 'react-native-paper'
-import Button from "../components/Button";
+
+//Firebase Config 
+import  firebaseConfig from "../FirebaseConfig/FirebaseConfig";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { initializeApp } from "@firebase/app";
+
+initializeApp(firebaseConfig);
+const auth = getAuth();
+
 
 export default function Login({ navigation }) {
+
+  const handleLogin = () => {
+  signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    console.log(user)
+    navigation.navigate('Home'); // Añade esta línea
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message; 
+  })
+};
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   return (<>
@@ -43,7 +66,7 @@ export default function Login({ navigation }) {
               style={styles.input}
               placeholder="Password"
               value={password}
-              onChange={setPassword}
+              onChangeText={setPassword}
               secureTextEntry={true}
             />
             <View style={styles.forgotPassawordContainer}>
@@ -55,7 +78,7 @@ export default function Login({ navigation }) {
         </View>
       </View>
 
-      <Button title="Login" />
+     <Button title="Login" onPress={handleLogin} />
       <View style={styles.footer}>
     <TouchableOpacity onPress={()=>navigation.navigate("Registro")}>
       <Text>Don't have an account? Sign up</Text>

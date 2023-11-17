@@ -2,18 +2,54 @@ import { StyleSheet,  View, Image, Touchable , Text } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import colors from '../components/colors'
+import  {getAuth, signOut} from 'firebase/auth';
+
 
 export default function DrawerView(props){
+
+    const auth = getAuth();
+
+    const handlerSignOut = () => {
+        signOut(auth).then(() => {
+          // Sign-out successful.
+          console.log("Sesion cerrada correctamente" + auth.currentUser);
+        }).catch((error) => {
+          // An error happened.
+        });
+      }
+    
+    
+    const user = auth.currentUser;
+    let displayName = '';
+    let email = '';
+
+
+    if(user != null){
+        console.log("Usuario logueado: "+user.email);
+        displayName = user.displayName; // Asigna el valor de user.displayName a displayName
+        email = user.email; // Asigna el valor de user.email a email
+        const photoURL = user.photoURL;
+        const emailVerified = user.emailVerified;
+        const uid = user.uid;
+    }
+    
+    
     return(
+        
         <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerHead}>
             <View style={styles.container}>
 
              {/**Apartado para informacion de login */}
+             <Text>Perfil : {displayName}</Text>
+             <Text>Email: {email}</Text>
             </View>
+           
+           
+
 
             <DrawerItemList {...props}/>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handlerSignOut}>
                 <Text>Cerrar Session</Text>
             </TouchableOpacity>
 
