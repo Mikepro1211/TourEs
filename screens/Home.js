@@ -28,7 +28,7 @@ export default function Home({ navigation }) {
 
 const styles = StyleSheet.create({
   categoriasContainer: {
-    backgroundColor: "#ff2",
+    backgroundColor: "#fffFFF",
     padding: 10,
   },
   categorias: {
