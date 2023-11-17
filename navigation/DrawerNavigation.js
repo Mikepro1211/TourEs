@@ -15,9 +15,9 @@ export default function DrawerNavigation({navigation}) {
       initialRouteName={TabNavigation}
       drawerContent={props => <DrawerView {...props} />}
       screenOptions={{
-        headerTintColor: "black",
+        headerTintColor: "white",
         headerStyle: {
-          backgroundColor:colors.blanquito,
+          backgroundColor:colors.primary,
         },
         headerTitle: ({ focused, color, size }) => (
           <View
