@@ -28,15 +28,9 @@ export default function TabNavigation() {
           ),
         }}
       />
-      <Tab.Screen
-        name="Boooking"
-        component={Booking}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="book" color={color} size={26} />
-          ),
-        }}
-      />
+     
+      
+      {/*
       <Tab.Screen
         name="Favorite"
         component={Favorite}
@@ -46,6 +40,7 @@ export default function TabNavigation() {
           ),
         }}
       />
+
       <Tab.Screen
         name="Mytrips"
         component={MyTrips}
@@ -55,6 +50,7 @@ export default function TabNavigation() {
           ),
         }}
       />
+      */}
     </Tab.Navigator>
   );
 }

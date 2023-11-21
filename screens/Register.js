@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -7,20 +8,39 @@ import {
   StyleSheet,
   TextInput,
   Button,
-  Alert,
+
 } from "react-native";
 import colors from "../components/colors";
 //import { TextInput } from 'react-native-paper'
+//importaciones de notificaciones
+
 
 //firebase
 import firebaseConfig from "../FirebaseConfig/FirebaseConfig";
 initializeApp(firebaseConfig);
 const auth = getAuth();
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, validatePassword } from "firebase/auth";
 import { initializeApp } from "@firebase/app";
 
 export default function Register({ navigation }) {
   const handleRegister = () => {
+     // Expresión regular para validar el email
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    // Expresión regular para validar la contraseña
+    // Esta es solo un ejemplo, deberías ajustarla a tus necesidades
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email');
+      return;
+    }
+
+    if (!passwordRegex.test(password)) {
+      alert('Password must contain at least 8 characters, one letter and one number');
+      return;
+    }
+  
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
@@ -35,21 +55,30 @@ export default function Register({ navigation }) {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        alert(errorMessage);
         // ..
       });
   };
   const [userName, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [isPassOk,setIsPassOk]=useState(true);
   const [Confirmpassword, setConfirmPassword] = React.useState("");
+   
+  validarPassword=(password)=>{
+    var re=/^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$/;
+    return re.test(password);
+   };
+    validarEmail=(email)=>{
+      var re=/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+      return re.test(email);
+    };
   return (
     <SafeAreaView style={styles.safeare}>
       <View style={styles.header}>
         <View style={styles.headercontainer}>
           <Text>Create new Account</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-            <Text>Skip</Text>
-          </TouchableOpacity>
+          
         </View>
 
         {/** Contenedor de Formulario */}
@@ -57,13 +86,7 @@ export default function Register({ navigation }) {
           <Text style={styles.formText}>Email</Text>
           {/** Input de Email */}
           <View style={styles.ContainerInput}>
-            <TextInput
-              style={styles.input}
-              placeholder="Username"
-              value={userName}
-              onChangeText={setUsername}
-              keyboardType="default"
-            />
+           
             <TextInput
               style={styles.input}
               placeholder="Email"
@@ -81,19 +104,14 @@ export default function Register({ navigation }) {
               onChangeText={setPassword}
               secureTextEntry={true}
             />
-            <Text style={styles.formText}>Confirm Password</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              value={Confirmpassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry={true}
-            />
+            
           </View>
         </View>
       </View>
 
-      <Button title="Register" onPress={handleRegister} />
+      <TouchableOpacity  style={styles.botonazo} onPress={handleRegister}>
+        <Text style={styles.textBoton}>Register</Text>
+        </TouchableOpacity>
       <View style={styles.footer}></View>
     </SafeAreaView>
   );
@@ -127,7 +145,7 @@ const styles = StyleSheet.create({
   input: {
     height: 50,
     borderRadius: 100,
-    borderColor: "#00000",
+   
     borderWidth: 1,
     padding: 15,
     marginBottom: 30,
@@ -157,4 +175,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 30,
   },
+  botonazo:{
+    backgroundColor: colors.primary700,
+    padding:10,
+    borderRadius:100,
+    width:'100%',
+    height:50,
+   
+},
+textBoton:{
+  color: 'white',
+  textAlign:'center',
+  fontSize:18,
+},
 });

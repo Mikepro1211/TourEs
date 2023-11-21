@@ -1,4 +1,5 @@
 import * as React from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Text,
   TouchableOpacity,
@@ -6,10 +7,14 @@ import {
   SafeAreaView,
   StyleSheet,
   TextInput,
-  Button
+  Button,
+  Alert
 } from "react-native";
 import colors from "../components/colors";
 //import Alerts  
+
+
+
 
 
 //Firebase Config 
@@ -23,7 +28,7 @@ const auth = getAuth();
 
 export default function Login({ navigation }) {
 
-  const handleLogin = () => {
+   const handleLogin = () => {
   signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed in 
@@ -36,19 +41,40 @@ export default function Login({ navigation }) {
   })
   .catch((error) => {
     const errorCode = error.code;
-    const errorMessage = error.message; 
+    const errorMessage = error.message;
+    console.log(errorCode)
+    console.log(errorMessage)
+    if (errorCode === "auth/user-not-found" && errorCode === "auth/wrong-password"){
+      alert("Usuario no encontrado Porfavor Registrese");
+    }
+    if(errorCode === "auth/invalid-login-credentials"){
+      alert("Contraseña incorrecta");
+    } else if (errorCode === "auth/invalid-email") {
+      alert("Email incorrecto");
+    }else if(errorCode === "auth/missing-password"){
+      alert("Coloque su contraseña");
+    }else if(errorCode === "auth/email-not-found"){
+      alert("Usuario no encontrado Porfavor Registrese");
+  }else if(errorCode === "auth/user-not-found"){
+
+  alert("Usuario no encontrado Porfavor Registrese"); 
+
+  }else {
+      alert(errorMessage);
+    }
   })
+    
 };
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   return (<>
     <SafeAreaView style={styles.safeare}>
+    
       <View style={styles.header}>
+      
         <View style={styles.headercontainer}>
           <Text>Sign in to your account</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-            <Text>Skip</Text>
-          </TouchableOpacity>
+          
         </View>
 
         {/** Contenedor de Formulario */}
@@ -74,20 +100,28 @@ export default function Login({ navigation }) {
               secureTextEntry={true}
             />
             <View style={styles.forgotPassawordContainer}>
-              <TouchableOpacity onPress={console.log("nAVE")}>
-                <Text>Forgot Password?</Text>
-              </TouchableOpacity>
+              
             </View>
           </View>
         </View>
       </View>
 
-     <Button title="Login" onPress={handleLogin} />
+     <TouchableOpacity style={styles.botonazo} onPress={handleLogin} >
+      <Text style={styles.textBoton}>Sign in</Text>
+      </TouchableOpacity>
       <View style={styles.footer}>
-    <TouchableOpacity onPress={()=>navigation.navigate("Registro")}>
+    <TouchableOpacity onPress={()=>navigation.navigate("Registro")}
+     
+    >
+
       <Text>Don't have an account? Sign up</Text>
+
+      {/*
+      <Button title="Reset first launch" onPress={() => AsyncStorage.removeItem('alreadyLaunched')} />
+      */}
     </TouchableOpacity>
     </View>  
+  
     </SafeAreaView>
     
   
@@ -96,6 +130,18 @@ export default function Login({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  botonazo:{
+    backgroundColor: colors.primary700,
+    padding:10,
+    borderRadius:100,
+    width:'100%',
+    height:50,
+},
+textBoton:{
+    color: 'white',
+    textAlign:'center',
+    fontSize:18,
+},
   footer: {
     display: "flex",
     flex: 0.5,
@@ -103,9 +149,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf:"button",
     marginTop: 200,
-    
-    
- 
   },
   forgotPassawordContainer: {
     display: "flex",

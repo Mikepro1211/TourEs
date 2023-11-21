@@ -9,180 +9,87 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { Searchbar } from "react-native-paper";
+import { Icon, Searchbar } from "react-native-paper";
 import { Card } from "react-native-ui-lib";
 import { Chip } from "react-native-paper";
 import colors from "../components/colors";
+import { getAuth } from "firebase/auth";
+
+import { data } from "../screens/Data";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 export default function Explore({ navigation }) {
-  const data = [
-    {
-      id: "1",
-      name: "Joya de Cerén",
-      description:
-        "Considerada la 'Pompeya de América', Joya de Cerén es un sitio arqueológico que muestra la vida cotidiana de una aldea maya.",
-      location: "Departamento de La Libertad",
-      image:
-        "https://elsalvador.travel/system/wp-content/uploads/2020/10/joya2.jpg",
-    },
-    {
-      id: "2",
-      name: "Ruta de las Flores",
-      description:
-        "Una pintoresca ruta que atraviesa pueblos encantadores, ofreciendo paisajes, gastronomía local y actividades al aire libre.",
-      location: "Varios departamentos: Ahuachapán, Sonsonate, Santa Ana",
-      image:
-        "https://tuncolife.com/wp-content/uploads/2019/04/tripadvisor-ruta-de-las-flores-flowers-route-english-girl-visiting-el-salvador.jpg",
-    },
-    {
-      id: "3",
-      name: "Playa El Tunco",
-      description:
-        "Famosa por sus olas para surfistas, esta playa también ofrece vibrante vida nocturna y una relajada atmósfera playera.",
-      location: "Departamento de La Libertad",
-      image:
-        "https://i0.wp.com/passporterapp.com/es/blog/wp-content/uploads/2022/05/que-ver-en-el-tunco-scaled.jpg?fit=2560%2C1707&ssl=1",
-    },
-    {
-      id: "4",
-      name: "Cerro Verde",
-      description:
-        "Parque nacional con impresionantes vistas de los volcanes Izalco, Santa Ana y Cerro Verde, además de senderos para caminatas.",
-      location: "Departamento de Santa Ana",
-      image:
-        "https://www.istu.gob.sv/wp-content/uploads/2020/09/Cerro02-min-scaled.jpg",
-    },
-    {
-      id: "5",
-      name: "Lago de Coatepeque",
-      description:
-        "Un hermoso lago de origen volcánico rodeado de montañas, ideal para actividades acuáticas y relajación junto al agua.",
-      location: "Departamento de Santa Ana",
-      image:
-        "https://elsalvador.travel/system/wp-content/uploads/2023/07/LagoCoatepeque01.jpg",
-    },
-    {
-      id: "6",
-      name: "Parque Nacional El Imposible",
-      description:
-        "Reserva natural con exuberante biodiversidad, cascadas y rutas de senderismo para los amantes de la naturaleza.",
-      location: "Departamento de Ahuachapán",
-      image:
-        "https://elsalvador.travel/system/wp-content/uploads/2021/04/10012021-El-Imposible-APPEX-5.jpg",
-    },
-    {
-      id: "7",
-      name: "Suchitoto",
-      description:
-        "Pueblo colonial con calles empedradas, arte, cultura, y el Lago Suchitlán cercano para avistamiento de aves.",
-      location: "Departamento de Cuscatlán",
-      image:
-        "https://media.tacdn.com/media/attractions-splice-spp-674x446/0f/6f/7a/f0.jpg",
-    },
-    {
-      id: "8",
-      name: "Catedral Metropolitana de San Salvador",
-      description:
-        "Icono arquitectónico en la capital, con una mezcla de estilos y arte religioso, representando la historia del país.",
-      location: "San Salvador, Departamento de San Salvador",
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Catedral_Metropolitana_de_San_Salvador%2C_ElSalvador.jpg/640px-Catedral_Metropolitana_de_San_Salvador%2C_ElSalvador.jpg",
-    },
-    {
-      id: "9",
-      name: "Tazumal",
-      description:
-        "Sitio arqueológico con pirámides y ruinas mayas en la zona de Chalchuapa, ofreciendo vistas al Valle de las Hamacas.",
-      location: "Departamento de Santa Ana",
-      image:
-        "https://elsalvador.travel/system/wp-content/uploads/2022/08/SantaAna.jpg",
-    },
-    {
-      id: "10",
-      name: "Paseo El Carmen",
-      description:
-        "Zona gastronómica y cultural con restaurantes, bares, tiendas de arte y entretenimiento nocturno en Santa Tecla.",
-      location: "Santa Tecla, Departamento de La Libertad",
-      image:
-        "https://www.viajeroselsalvador.com/uploads/5/6/1/0/5610753/4994600_orig.png",
-    },
-  ];
+  const firstFiveData = data.slice(0, 5);
+  const LosmasVistos = data.slice(6, 10);
+  const [searchText, setSearchText] = useState("");
 
-  const categotia = [
-    {
-      id: 1,
-      name: "Popular",
-      icon: "campfire",
-    },
-    {
-      id: 2,
-      name: "Lake",
-      icon: "brain",
-    },
-    {
-      id: 3,
-      name: "beach",
-      icon: "beach",
-    },
-    {
-      id: 4,
-      name: "Mountain",
-      icon: "image-filter-hdr",
-    },
-  ];
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredData, setFilteredData] = useState(data);
 
-  useEffect(() => {
-    const filteredResults = data.filter((item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredData(filteredResults);
-  }, [searchQuery]);
+  const filteredData = data.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      item.location.toLowerCase().includes(searchText.toLowerCase()) ||
+      item.categoria.toLowerCase().includes(searchText.toLowerCase())
+  );
 
-  const onChangeSearch = (query) => setSearchQuery(query);
   return (
     <ScrollView style={styles.mainContainer}>
       <View>
         <SafeAreaView>
+          {/**Contenedor para bienvenida de usuario */}
           <View>
             <Searchbar
               style={styles.containerSearchbar}
               placeholder="Search"
-              onChange={onChangeSearch}
-              value={searchQuery}
+              onChangeText={setSearchText}
+              value={searchText}
             />
+
+            {searchText &&
+              (filteredData.length > 0 ? (
+                filteredData.map((item) => (
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("Details", { data: item })
+                    }
+                  >
+                    <View style={styles.contenedorBusquedad}>
+                      <Card>
+                        <View style={styles.containerinsidecard}>
+                          <Card.Section
+                            content={[{ text: item.name, text70: true }]}
+                            style={{ alignItems: "flex-start" }}
+                          />
+                        </View>
+                      </Card>
+                    </View>
+                  </TouchableOpacity>
+                ))
+              ) : (
+                <View style={styles.NoTfOUND}>
+                  <MaterialCommunityIcons
+                    name="emoticon-sad"
+                    color={"red"}
+                    size={50}
+                  >
+                    <Text style={{ fontSize: 20 }}>
+                      No se encontraron resultados
+                    </Text>
+                  </MaterialCommunityIcons>
+                </View>
+              ))}
           </View>
 
-          <FlatList
-            data={categotia}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => {
-              return (
-                <TouchableOpacity>
-                  <Chip
-                    style={{
-                      marginHorizontal: 5,
-                      backgroundColor: colors.primary200,
-                      borderColor: "white",
-                      marginBottom: 40,
-                    }}
-                    icon={item.icon}
-                  >
-                    {item.name}
-                  </Chip>
-                </TouchableOpacity>
-              );
-            }}
-            horizontal
-          />
           <View style={{ marginBottom: 30 }}>
             <Text style={styles.tittle}>Lugares turisticos</Text>
             <FlatList
-              data={data}
+              data={firstFiveData}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => {
                 return (
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("Details", { data: item })
+                    }
+                  >
                     <View style={styles.containerCard}>
                       <View style={styles.containerImageCard}>
                         <Card.Image
@@ -199,7 +106,11 @@ export default function Explore({ navigation }) {
                             style: { marginTop: 10 },
                           },
                         ]}
-                        style={{ alignItems: "flex-start" }}
+                        style={{
+                          alignItems: "flex-start",
+                          marginTop: 10,
+                          alignSelf: "center",
+                        }}
                       />
                     </View>
                   </TouchableOpacity>
@@ -208,6 +119,45 @@ export default function Explore({ navigation }) {
               horizontal
             />
           </View>
+          <View>
+            <Text style={styles.tittle}>Los mas vistos</Text>
+            <View>
+              {LosmasVistos.map((item) => (
+                <TouchableOpacity onPress={() =>
+                  navigation.navigate("Details", { data: item })}
+                  >
+                  <View style={styles.containerCardVistos}>
+                    <View style={styles.containerImageCard}>
+                      <Card.Image
+                        style={styles.imageCardVertical}
+                        source={{ uri: item.image }}
+                      />
+                      </View>
+                      <View style={styles.sectionInformation}>
+                      <Card.Section 
+                        content={[
+                          { text: item.name, text70: true },
+                          {
+                            text: item.location,
+                            text90: true,
+                           
+                            style: { marginTop: 10 },
+                          },
+                          {
+                            text: item.categoria,
+                            text90: true,
+                            style: { marginTop: 10 },
+                          }
+                        ]}
+                        style={styles.secondInformationCard}
+                      />
+                     
+                      </View>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
         </SafeAreaView>
       </View>
     </ScrollView>
@@ -215,6 +165,60 @@ export default function Explore({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  
+  
+  sectionInformation:{
+    display: "flex",
+    flexDirection: "row",
+    marginHorizontal: 10,
+    paddingHorizontal: 10,
+    justifyContent: "space-between",
+  },
+
+
+  containerCardVistos:{
+    width: "100%",
+    borderRadius: 10,
+    backgroundColor: colors.blanquito2,
+    height: 200,
+    textAlign: "center",
+    marginHorizontal: 10,
+    marginBottom: 50,
+  },
+  NoTfOUND: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+    marginBottom: 50,
+    color: "white",
+  },
+  contenedorBusquedad: {
+    display: "flex",
+    flex: 1,
+    width: "100%",
+    height: 50,
+    padding: 10,
+    margin: 10,
+  },
+  userImage: {
+    height: 100,
+    width: 100,
+    borderRadius: 50,
+  },
+  userDetails: {
+    display: "flex",
+    flexDirection: "column",
+
+    alignItems: "center",
+    padding: 10,
+  },
+  containerBienvenido: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   mainContainer: {
     padding: 16,
     backgroundColor: colors.blanquito,
@@ -247,6 +251,7 @@ const styles = StyleSheet.create({
 
   tittle: {
     fontSize: 16,
+    marginBottom: 10,
     fontWeight: "bold",
   },
   containerCard: {
@@ -277,6 +282,13 @@ const styles = StyleSheet.create({
   imageCardVertical: {
     width: "100%",
     height: "100%",
+  },
+
+  containerinsidecard: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

@@ -1,22 +1,21 @@
-import { StyleSheet,  View, Image, Touchable , Text } from 'react-native';
+import { StyleSheet,  View, Image, Touchable, Text } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import colors from '../components/colors'
 import  {getAuth, signOut} from 'firebase/auth';
-import Login from '../screens/Login';
+
 
 
 export default function DrawerView(props ){
    const  {navigation} = props;
     const auth = getAuth();
     const user = auth.currentUser;
-    const [screen, setScreen] = useState("login");
-
+  //const/funcion para cerrar sesion
     const handlerSignOut = () => {
         signOut(auth).then(() => {
           // Sign-out successful.
           console.log("Sesion cerrada correctamente"  );
-          navigation.navigate('login');
+          navigation.navigate('StartScreen');
         }).catch((error) => {
           // An error happened.
         });
@@ -26,15 +25,15 @@ export default function DrawerView(props ){
    
     let displayName = '';
     let email = '';
+    let photoURL = '';
 
 
     if(user != null){
         console.log("Usuario logueado: "+user.email);
-        displayName = user.displayName; // Asigna el valor de user.displayName a displayName
-        email = user.email; // Asigna el valor de user.email a email
-        const photoURL = user.photoURL;
-        const emailVerified = user.emailVerified;
-        const uid = user.uid;
+        displayName = user.displayName; 
+        email = user.email; 
+        photoURL = user.photoURL;
+       
     }
     
     
@@ -44,8 +43,8 @@ export default function DrawerView(props ){
             <View style={styles.container}>
 
              {/**Apartado para informacion de login */}
-             <Text>Perfil : {displayName}</Text>
-             <Text>Email: {email}</Text>
+             <Image style={styles.Photoprofile}source={{uri: photoURL}}/>
+             <Text style={{textAlign:'center', fontSize:20, fontWeight:'bold'}}>{displayName}</Text>
             </View>
            
            
@@ -53,8 +52,8 @@ export default function DrawerView(props ){
 
             <DrawerItemList {...props}/>
 
-            <TouchableOpacity onPress={handlerSignOut}>
-                <Text>Cerrar Session</Text>
+            <TouchableOpacity  style={styles.botonazo}onPress={handlerSignOut}>
+                <Text style={styles.textBoton}>Cerrar Session</Text>
             </TouchableOpacity>
 
 
@@ -84,4 +83,29 @@ const styles = StyleSheet.create({
 
         height:'100%',
     },
+    Photoprofile:{
+        width: '50%',
+        height: 150,
+        borderRadius: 50,
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+
+    botonazo:{
+        backgroundColor: colors.primary700,
+        padding:10,
+        borderRadius:100,
+        width:'60%',
+        height:50,
+        alignItems:'center',
+        justifyContent:'center',
+        alignSelf:'center',
+        marginTop:100,
+    },
+    textBoton:{
+      color: 'white',
+      textAlign:'center',
+      fontSize:18,
+    },
+    
 })
